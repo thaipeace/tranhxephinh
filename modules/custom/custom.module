@@ -1,0 +1,38 @@
+<?php
+module_load_include('inc', 'webform', 'includes/webform.submissions');
+
+/**
+ * Form alter
+ */
+function custom_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == 'webform_client_form_87') {
+    drupal_add_js(drupal_get_path('module', 'custom') . '/js/custom.js');
+    if ($form_state['webform']['page_num'] == 3) {
+      $file_id = $form_state['values']['submitted'][1];
+      $peace_type = $form_state['values']['submitted'][2];
+
+      $image_url = file_load($file_id);
+      $image = '<div id="image_container" class="container"><img class="client_img" src="' . file_create_url($image_url->uri) . '" /></div>';
+
+      $piece_types = array(
+          '35x35' => '35x35_49_manh_5cm',
+          '35x50' => '35x50_70_manh_5cm',
+          '50x50' => '50x50_100_manh_5cm',
+          '50x74' => '50x74_925_manh',
+          '9x9' => '9x9cm_5cm',
+          '18x24' => '18x24_108_manh',
+          '25x35' => '25x35_35_manh_5cm',
+          '26x38' => '26x38_247_manh',
+          '38x50' => '38x50_475_manh',
+          '50x80' => '50x80_1000_manh'
+        );
+      $piece_url = file_create_url('public://piece') . '/' . $piece_types[$peace_type] . '.png';
+      $piece = '<div id="piece_container" class="container"><img class="piece" src="' . $piece_url . '" /></div>';
+
+      $form['combine'] = array(
+          '#markup' => '<div id="combine_container" >' . $image . $piece . '</div>'
+        );
+    }
+  }
+}

@@ -1,0 +1,4 @@
+name = Custom
+description = Custom site.
+core = 7.x
+
